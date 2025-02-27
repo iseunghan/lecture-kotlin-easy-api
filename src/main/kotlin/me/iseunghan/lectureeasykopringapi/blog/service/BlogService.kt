@@ -17,7 +17,6 @@ class BlogService {
     lateinit var kakaoRestApiKey: String
 
     fun searchKakao(blogDto: BlogDto): String? {
-        validBlogDto(blogDto)
         return retrieveBlogArticles(blogDto).block()
     }
 

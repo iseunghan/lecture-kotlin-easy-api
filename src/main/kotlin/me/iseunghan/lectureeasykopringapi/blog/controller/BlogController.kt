@@ -1,5 +1,6 @@
 package me.iseunghan.lectureeasykopringapi.blog.controller
 
+import jakarta.validation.Valid
 import me.iseunghan.lectureeasykopringapi.blog.dto.BlogDto
 import me.iseunghan.lectureeasykopringapi.blog.service.BlogService
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +14,7 @@ class BlogController(
 
     @GetMapping("/api/blog")
     fun search(
-        @RequestBody blogDto: BlogDto
+        @RequestBody @Valid blogDto: BlogDto
     ): String? {
         return blogService.searchKakao(blogDto)
     }
