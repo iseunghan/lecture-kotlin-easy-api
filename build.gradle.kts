@@ -22,10 +22,17 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    // netty silicon Mac Chip 미 지원으로 인한 의존성 추가
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
+    testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
