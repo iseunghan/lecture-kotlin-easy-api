@@ -1,0 +1,14 @@
+services:
+  db:
+    container_name: mariadb-dev
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker_volume/mysql/conf.d:/etc/mysql/conf.d
+      - ./docker_volume/mysql/data:/var/lib/mysql
+      - ./docker_volume/mysql/initdb.d:/docker-entrypoint-initdb.d
+    env_file: ./docker_volume/mysql/.env
+    environment:
+      TZ: Asia/Seoul
+    restart: always
