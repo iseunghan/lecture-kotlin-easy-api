@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface WordRepository: CrudRepository<WordCount, String>
+interface WordRepository : CrudRepository<WordCount, String> {
+    fun findTop10ByOrderByCntDesc(): List<WordCount>
+}

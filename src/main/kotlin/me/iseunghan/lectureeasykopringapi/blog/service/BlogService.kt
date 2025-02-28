@@ -1,23 +1,35 @@
 package me.iseunghan.lectureeasykopringapi.blog.service
 
 import me.iseunghan.lectureeasykopringapi.blog.dto.BlogDto
+import me.iseunghan.lectureeasykopringapi.blog.entity.WordCount
+import me.iseunghan.lectureeasykopringapi.blog.repository.WordRepository
 import me.iseunghan.lectureeasykopringapi.core.exception.InvalidInputException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.StringUtils
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.core.publisher.Mono
 
 @Service
-class BlogService {
-    @Value("\${kakao.rest-api-key}")
-    lateinit var kakaoRestApiKey: String
+class BlogService(
+    val wordRepository: WordRepository,
+    @Value("\${kakao.rest-api-key}") var kakaoRestApiKey: String
+) {
 
+    @Transactional
     fun searchKakao(blogDto: BlogDto): String? {
+        countWord(blogDto.query.lowercase())
         return retrieveBlogArticles(blogDto).block()
+    }
+
+    protected fun countWord(query: String) {
+        val wordCount = wordRepository.findById(query).orElse(WordCount(word = query))
+        wordCount.increaseCnt()
+        wordRepository.save(wordCount)
     }
 
     private fun retrieveBlogArticles(blogDto: BlogDto): Mono<String> {
@@ -39,6 +51,12 @@ class BlogService {
             .retrieve()
             .bodyToMono<String>()
     }
+
+    @Transactional(readOnly = true)
+    public fun searchWordRank(): Map<String, Int> {
+        return wordRepository.findTop10ByOrderByCntDesc().associate { it.word to it.cnt }
+    }
+
 
     private fun validBlogDto(blogDto: BlogDto) {
         val msgList = mutableListOf<ExceptionMsg>()

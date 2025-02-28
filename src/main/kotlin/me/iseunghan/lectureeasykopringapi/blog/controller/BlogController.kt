@@ -18,4 +18,9 @@ class BlogController(
     ): String? {
         return blogService.searchKakao(blogDto)
     }
+
+    @GetMapping("/api/word/rank")
+    fun searchTop100Word(): Map<String, Int>? {
+        return blogService.searchWordRank()
+    }
 }
