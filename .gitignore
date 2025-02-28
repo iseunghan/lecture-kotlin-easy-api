@@ -7,6 +7,7 @@
 
 # Custom
 docker_volume/mysql/data/
+src/main/resources/application-secret.yml
 
 # User-specific stuff
 .idea/**/workspace.xml
